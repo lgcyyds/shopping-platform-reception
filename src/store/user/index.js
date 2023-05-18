@@ -53,7 +53,7 @@ const actions = {
             return Promise.reject(new Error('faile'))
         }
     },
-    // 通过登录时在请求头传给服务器Token，来获取用户信息
+    // 通过登录时在请求头传给服务器Token，来获取用户信息(在路由调用)
     async getUserInfo({ commit }) {
         const result = await reqUserInfo()
         if (result.code == 200) {

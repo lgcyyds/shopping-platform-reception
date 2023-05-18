@@ -82,6 +82,7 @@ export default {
         if(phone&&password){
           await this.$store.dispatch('Login', { phone, password })
           let toPath=this.$route.query.redirect
+          
           if(toPath){
             this.$router.push(toPath)
           }else{

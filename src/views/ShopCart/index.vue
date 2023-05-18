@@ -41,7 +41,8 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" :checked="isAllCheck&&CartInfoList.length>0" @change="updateAllCartChecked($event)">
+        <input class="chooseAll" type="checkbox" :checked="isAllCheck && CartInfoList.length > 0"
+          @change="updateAllCartChecked($event)">
         <span>全选</span>
       </div>
       <div class="option">
@@ -122,6 +123,7 @@ export default {
         alert(error.message)
       }
     },
+    //删除购物车的商品
     deleteCart: throttle(async function (skuId) {
       try {
         await this.$store.dispatch('deleteCartList', skuId)
@@ -131,22 +133,33 @@ export default {
       }
     }, 500),
     //删除选定的所有商品
-    async deleteAllcart() {
+    // async deleteAllcart() {
+    //   try {
+    //     await this.$store.dispatch('deleteAllCheckCart');
+    //     this.getList()
+    //   } catch (error) {
+    //     alert(error.message)
+    //   }
+    // },
+    //promise写法
+    deleteAllcart() {
+      this.$store.dispatch('deleteAllCheckCart')
+        .then(() => {
+          this.getList();
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    },
+    //全选或者取消全选
+    async updateAllCartChecked(event) {
       try {
-        await this.$store.dispatch('deleteAllCheckCart');
+        let checked = event.target.checked ? 1 : 0
+        await this.$store.dispatch('updateAllCartIsChecked', checked)
         this.getList()
       } catch (error) {
         alert(error.message)
       }
-    },
-    async updateAllCartChecked(event){
-     try {
-      let checked =event.target.checked?1:0
-      await this.$store.dispatch('updateAllCartIsChecked',checked)
-      this.getList()
-     } catch (error) {
-      alert(error.message)
-     }
     }
   },
   computed: {

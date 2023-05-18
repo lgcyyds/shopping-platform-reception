@@ -9,6 +9,7 @@ const requests = axios.create({
 
 requests.interceptors.request.use((config)=>{
     nprogress.start();
+    //游客模式
     if(store.state.detail.UUID_token){
         //给请求头添加字段
         config.headers.userTempId=store.state.detail.UUID_token

@@ -11,8 +11,7 @@ const actions = {
     async getSearchList({ commit }, params = {}) {
         const result = await reqGetSearchInfo(params);
         if (result.code == 200) {
-            commit('GETSEARCHLIST', result.data)
-
+            commit('GETSEARCHLIST', result.data)            
         }
     }
 };

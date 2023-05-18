@@ -183,6 +183,7 @@ export default {
     beforeMount() {
         //这个方法可以将其他对象的值拷贝到目标对象中，也就是在挂载之前将路由的数据存到参数中
         Object.assign(this.SearchListData, this.$route.params, this.$route.query)
+        
     },
     mounted() {
         // 挂载后把参数数据通过发送请求传给服务器
@@ -205,6 +206,7 @@ export default {
         }
     },
     methods: {
+        // 获取或刷新数据
         getData() {
             this.$store.dispatch('getSearchList', this.SearchListData)
             //在更新前，将上一次三级菜单的值置空，这样就不会参数就不会同时出现一二三级菜单
@@ -212,6 +214,7 @@ export default {
             this.SearchListData.category2Id = undefined
             this.SearchListData.category3Id = undefined
         },
+        //删除属性面包屑
         removeCategoryName() {
             //无需使用getData（），因为改变了路由，就被监听到了，自动生成新参数并调用getData（）
             // this.$route.query.categoryName = ''//好像不要这一句也没关系，因为跳转路由不带query就好
@@ -220,6 +223,7 @@ export default {
             //保证params参数不会跟着没了
             this.$router.push({ name: 'search', params: this.$route.params })
         },
+        //删除面包屑之后，搜索框置空
         removeKeyWord() {
             this.SearchListData.keyword = undefined
             this.$router.push({ name: 'search', query: this.$route.query })
@@ -227,16 +231,19 @@ export default {
             this.$bus.$emit("clear")
 
         },
+        // 点击品牌
         searchTradeMark(index) {
             this.SearchListData.trademark = `${index.tmId}:${index.tmName}`
             console.log(this.SearchListData.trademark);
             this.getData() 
 
         },
+        //删除品牌面包屑
         removeTradeMark() {
             this.SearchListData.trademark = undefined
             this.getData()
         },
+        // 点击商品属性
         attrInfo(item, value) {
             console.log(item, value);
             // ["2:6.0～6.24英寸:屏幕尺寸"]
@@ -247,15 +254,15 @@ export default {
                 console.log(this.SearchListData.props);
                 this.getData()
             }
-
-
         },
+        // 删除面包屑
         removeAttr(index) {
             this.SearchListData.props.splice(index, 1)
             console.log(this.SearchListData.props);
 
             this.getData()
         },
+        // 改变排序
         changeOrder(num){            
             if(this.SearchListData.order.indexOf(num)!=-1){
                 let upAndDown=this.SearchListData.order.split(":")[1]
@@ -266,13 +273,15 @@ export default {
                 this.getData()  
             }
         },
+        // 翻页
         getPageNo(page){
             this.SearchListData.pageNo=page            
             this.getData()
         },
     },
+
     watch: {
-        //监听路由变化，如果路由发生变化，就更新请求参数
+        //监听路由变化，如果路由发生变化，就更新请求参数（removeCategoryName）
         $route() {
             Object.assign(this.SearchListData, this.$route.params, this.$route.query)
             this.getData()

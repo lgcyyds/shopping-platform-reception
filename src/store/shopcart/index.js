@@ -11,6 +11,7 @@ const mutations = {
     }
 }
 const actions = {
+    //获取购物车列表数据
     async getCartList({ commit }) {
         const result = await reqCartList()
         console.log(result);
@@ -48,11 +49,14 @@ const actions = {
     },
     //删除购物车选中的商品
     deleteAllCheckCart({dispatch,getters}){
+        //创建一个promise数组
         let promiseAll=[]
         getters.CartInfoList.forEach(item => {
             let promise = item.isChecked==1?dispatch('deleteCartList',item.skuId):''
+            //遍历每一个商品的勾选状态，只要是勾选的，就调用删除接口，并将返回的promise对象保存在数组中
             promiseAll.push(promise)
         });
+        //返回全部都成功删除的promise对象
         return Promise.all(promiseAll)
     },
    
